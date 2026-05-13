@@ -23,12 +23,17 @@ export default function TaskModal({ task, onClose, onSaved }) {
   const submit = async (e) => {
     e.preventDefault();
     setSaving(true);
+    const payload = {
+      ...form,
+      assignedTo: form.assignedTo || undefined,
+      dueDate: form.dueDate || undefined,
+    };
     try {
       if (task?._id) {
-        await api.put(`/tasks/${task._id}`, form);
+        await api.put(`/tasks/${task._id}`, payload);
         toast.success('Task updated');
       } else {
-        await api.post('/tasks', form);
+        await api.post('/tasks', payload);
         toast.success('Task created');
       }
       onSaved();

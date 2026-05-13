@@ -7,6 +7,20 @@ const logActivity = async (taskId, userId, action, meta = {}) => {
   await Log.create({ task: taskId, user: userId, action, meta });
 };
 
+const normalizeTaskPayload = (payload) => {
+  const normalized = { ...payload };
+
+  if (normalized.assignedTo === '') {
+    delete normalized.assignedTo;
+  }
+
+  if (normalized.dueDate === '') {
+    delete normalized.dueDate;
+  }
+
+  return normalized;
+};
+
 // GET /api/tasks — user sees assigned, manager sees all they created
 router.get('/', protect, async (req, res) => {
   try {
@@ -33,7 +47,7 @@ router.get('/', protect, async (req, res) => {
 // POST /api/tasks — managers only
 router.post('/', protect, managerOnly, async (req, res) => {
   try {
-    const task = await Task.create({ ...req.body, createdBy: req.user._id });
+    const task = await Task.create({ ...normalizeTaskPayload(req.body), createdBy: req.user._id });
     await logActivity(task._id, req.user._id, 'created task');
     req.io.emit('task:created', task);
     res.status(201).json(task);
@@ -53,7 +67,7 @@ router.put('/:id', protect, async (req, res) => {
 
     if (req.user.role === 'manager' && String(task.createdBy) === String(req.user._id)) {
       allowed = true;
-      updates = req.body;
+      updates = normalizeTaskPayload(req.body);
     } else if (req.user.role === 'user' && String(task.assignedTo) === String(req.user._id)) {
       allowed = true;
       updates = { status: req.body.status }; // users can only update status
