@@ -11,6 +11,12 @@ const StatCard = ({ label, value, color }) => (
   </div>
 );
 
+const assigneeNames = (assignedTo) => {
+  if (!assignedTo) return '';
+  const values = Array.isArray(assignedTo) ? assignedTo : [assignedTo];
+  return values.map((assigned) => assigned?.name).filter(Boolean).join(', ');
+};
+
 export default function DashboardPage() {
   const { user } = useAuthStore();
   const [tasks, setTasks] = useState([]);
@@ -83,8 +89,8 @@ export default function DashboardPage() {
                   <div key={task._id} className="flex flex-col gap-3 py-3 border-b border-slate-100 dark:border-slate-800 last:border-0 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <p className="font-medium text-sm">{task.title}</p>
-                      {task.assignedTo && (
-                        <p className="text-xs text-slate-400 mt-0.5">→ {task.assignedTo.name}</p>
+                      {assigneeNames(task.assignedTo) && (
+                        <p className="text-xs text-slate-400 mt-0.5">Assigned to {assigneeNames(task.assignedTo)}</p>
                       )}
                     </div>
                     <div className="flex flex-wrap gap-2">

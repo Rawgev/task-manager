@@ -6,8 +6,9 @@ const TaskSchema = new mongoose.Schema({
   status: { type: String, enum: ['todo', 'in-progress', 'completed'], default: 'todo' },
   priority: { type: String, enum: ['low', 'medium', 'high'], default: 'medium' },
   dueDate: { type: Date },
-  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  order: { type: Number, default: () => Date.now() }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Task', TaskSchema);

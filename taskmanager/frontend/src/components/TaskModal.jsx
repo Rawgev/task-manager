@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react';
 import api from '../api';
 import toast from 'react-hot-toast';
 
+const assignedIds = (assignedTo) => {
+  if (!assignedTo) return [];
+  const values = Array.isArray(assignedTo) ? assignedTo : [assignedTo];
+  return values.map((user) => user?._id || user).filter(Boolean);
+};
+
 export default function TaskModal({ task, onClose, onSaved }) {
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({
@@ -10,7 +16,7 @@ export default function TaskModal({ task, onClose, onSaved }) {
     status: task?.status || 'todo',
     priority: task?.priority || 'medium',
     dueDate: task?.dueDate ? task.dueDate.slice(0, 10) : '',
-    assignedTo: task?.assignedTo?._id || task?.assignedTo || ''
+    assignedTo: assignedIds(task?.assignedTo)
   });
   const [saving, setSaving] = useState(false);
 
@@ -19,14 +25,22 @@ export default function TaskModal({ task, onClose, onSaved }) {
   }, []);
 
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const toggleAssignee = (userId) => {
+    setForm((current) => ({
+      ...current,
+      assignedTo: current.assignedTo.includes(userId)
+        ? current.assignedTo.filter((id) => id !== userId)
+        : [...current.assignedTo, userId],
+    }));
+  };
 
   const submit = async (e) => {
     e.preventDefault();
     setSaving(true);
     const payload = {
       ...form,
-      assignedTo: form.assignedTo || undefined,
-      dueDate: form.dueDate || undefined,
+      assignedTo: form.assignedTo,
+      dueDate: form.dueDate || null,
     };
     try {
       if (task?._id) {
@@ -86,12 +100,27 @@ export default function TaskModal({ task, onClose, onSaved }) {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Assign To</label>
-              <select name="assignedTo" value={form.assignedTo} onChange={handle} className="input">
-                <option value="">Unassigned</option>
-                {users.map((u) => (
-                  <option key={u._id} value={u._id}>{u.name}</option>
-                ))}
-              </select>
+              <div className="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800">
+                <p className="mb-2 text-xs text-slate-400">
+                  {form.assignedTo.length === 0 ? 'Unassigned - visible to everyone' : `${form.assignedTo.length} selected`}
+                </p>
+                <div className="max-h-36 space-y-2 overflow-y-auto pr-1">
+                  {users.map((u) => (
+                    <label key={u._id} className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={form.assignedTo.includes(u._id)}
+                        onChange={() => toggleAssignee(u._id)}
+                        className="h-4 w-4 rounded border-slate-300 accent-brand-500"
+                      />
+                      <span>{u.name}</span>
+                    </label>
+                  ))}
+                  {users.length === 0 && (
+                    <p className="text-sm text-slate-400">No users found</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           <div className="flex flex-col gap-3 mt-2 sm:flex-row">
