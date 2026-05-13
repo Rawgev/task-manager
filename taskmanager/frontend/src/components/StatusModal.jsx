@@ -23,7 +23,7 @@ export default function StatusModal({ task, onClose, onSaved }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="card w-full max-w-sm p-6 shadow-2xl">
+      <div className="card w-full max-w-sm p-4 shadow-2xl sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold font-display">Update Status</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-2xl leading-none">×</button>
@@ -35,7 +35,7 @@ export default function StatusModal({ task, onClose, onSaved }) {
             <option value="in-progress">In Progress</option>
             <option value="completed">Completed</option>
           </select>
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <button type="button" onClick={onClose} className="btn-ghost flex-1">Cancel</button>
             <button type="submit" disabled={saving} className="btn-primary flex-1">{saving ? '…' : 'Update'}</button>
           </div>

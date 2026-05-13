@@ -41,12 +41,12 @@ export default function AuthPage() {
       </button>
 
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold font-display text-brand-600 dark:text-brand-400 mb-1">TaskFlow</h1>
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold font-display text-brand-600 dark:text-brand-400 mb-1">TaskFlow</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm">Collaborative Task Manager</p>
         </div>
 
-        <div className="card p-8">
+        <div className="card p-5 sm:p-8">
           <div className="flex gap-2 mb-6 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
             {['login', 'signup'].map((m) => (
               <button

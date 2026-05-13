@@ -42,7 +42,7 @@ export default function TaskModal({ task, onClose, onSaved }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="card w-full max-w-lg p-6 shadow-2xl">
+      <div className="card max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto p-4 shadow-2xl sm:p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold font-display">{task ? 'Edit Task' : 'New Task'}</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl leading-none">×</button>
@@ -56,7 +56,7 @@ export default function TaskModal({ task, onClose, onSaved }) {
             <label className="block text-sm font-medium mb-1.5">Description</label>
             <textarea name="description" value={form.description} onChange={handle} className="input resize-none" rows={3} placeholder="Optional details…" />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium mb-1.5">Status</label>
               <select name="status" value={form.status} onChange={handle} className="input">
@@ -74,7 +74,7 @@ export default function TaskModal({ task, onClose, onSaved }) {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium mb-1.5">Due Date</label>
               <input type="date" name="dueDate" value={form.dueDate} onChange={handle} className="input" />
@@ -89,7 +89,7 @@ export default function TaskModal({ task, onClose, onSaved }) {
               </select>
             </div>
           </div>
-          <div className="flex gap-3 mt-2">
+          <div className="flex flex-col gap-3 mt-2 sm:flex-row">
             <button type="button" onClick={onClose} className="btn-ghost flex-1">Cancel</button>
             <button type="submit" disabled={saving} className="btn-primary flex-1">{saving ? 'Saving…' : 'Save Task'}</button>
           </div>

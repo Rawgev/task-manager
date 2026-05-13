@@ -122,22 +122,22 @@ export default function TasksPage() {
   const colTasks = (colId) => tasks.filter((t) => t.status === colId);
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="flex items-start justify-between mb-6 sm:mb-8 flex-wrap gap-4">
         <div>
-          <h2 className="text-3xl font-bold font-display">Tasks</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold font-display">Tasks</h2>
           <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">{tasks.length} task{tasks.length !== 1 ? 's' : ''} shown</p>
         </div>
-        <div className="flex gap-3 flex-wrap items-center">
+        <div className="flex w-full gap-3 flex-wrap items-center sm:w-auto">
           <select value={filter} onChange={(e) => { setFilter(e.target.value); setPage(1); }}
-            className="input !w-auto text-sm py-2">
+            className="input min-w-0 flex-1 text-sm py-2 sm:!w-auto sm:flex-none">
             <option value="">All Statuses</option>
             <option value="todo">To Do</option>
             <option value="in-progress">In Progress</option>
             <option value="completed">Completed</option>
           </select>
           {isManager && (
-            <button onClick={() => setModal({ type: 'create' })} className="btn-primary">
+            <button onClick={() => setModal({ type: 'create' })} className="btn-primary flex-1 sm:flex-none">
               + New Task
             </button>
           )}
@@ -148,7 +148,7 @@ export default function TasksPage() {
         <div className="text-slate-400 animate-pulse text-center py-20">Loading tasks…</div>
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6">
             {COLS.map((col) => (
               <div key={col.id} data-col={col.id}
                 className="bg-slate-100 dark:bg-slate-900 rounded-2xl p-4 min-h-[200px]">
@@ -183,7 +183,7 @@ export default function TasksPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-8">
+        <div className="flex flex-wrap justify-center gap-2 mt-8">
           <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="btn-ghost text-sm px-3 py-1.5">← Prev</button>
           <span className="px-4 py-1.5 text-sm text-slate-500">Page {page} / {totalPages}</span>
           <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} className="btn-ghost text-sm px-3 py-1.5">Next →</button>
